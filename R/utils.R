@@ -33,17 +33,21 @@ removeSpace <- function(plist) {
 #' @param col,zmax,ymax,unit,title Passed to [drawHiC()].
 #' @param heights Relative panel heights.
 #' @param scale Depth-normalisation multiplier for the map.
+#' @param rotate,fixed Passed to [drawHiC()]. Use `rotate = FALSE` for a square
+#'   map; its x-axis is then kept aligned with the tracks via `egg::ggarrange()`.
 #' @return A combined ggplot/cowplot object.
 #' @export
 drawStack <- function(hic, hic_name = "hic1", boundary_name = "boundary",
                       gene = FALSE, col = "matlab", zmax = 0.99, ymax = NULL,
-                      unit = 1e3, title = NULL, heights = NULL, scale = 1) {
+                      unit = 1e3, title = NULL, heights = NULL, scale = 1,
+                      rotate = TRUE, fixed = TRUE) {
   if (!requireNamespace("cowplot", quietly = TRUE)) {
     stop("package 'cowplot' is required for drawStack()")
   }
   plist <- list(drawHiC(hic, dataName = hic_name, col = col, zmax = zmax,
                         ymax = ymax, unit = unit, title = title,
-                        xaxis = FALSE, scale = scale))
+                        xaxis = FALSE, scale = scale,
+                        rotate = rotate, fixed = fixed))
   labs <- "hic"
   if (!is.null(boundary_name)) {
     plist <- c(plist, list(drawBW(hic, dataName = boundary_name,
@@ -60,6 +64,13 @@ drawStack <- function(hic, hic_name = "hic1", boundary_name = "boundary",
     heights <- c(4, rep(1.7, length(plist) - 2), if (gene) 2 else NULL)
     heights <- heights[seq_along(plist)]
   }
-  cowplot::plot_grid(plotlist = plist, ncol = 1, align = "v",
-                     rel_heights = heights)
+  # egg::ggarrange gives every panel the same plot-area width even when the map
+  # uses coord_fixed (square). Fall back to cowplot if egg is not installed.
+  if (requireNamespace("egg", quietly = TRUE)) {
+    cowplot::plot_grid(egg::ggarrange(plots = plist, ncol = 1,
+                                      heights = heights, draw = FALSE))
+  } else {
+    cowplot::plot_grid(plotlist = plist, ncol = 1, align = "v",
+                       rel_heights = heights)
+  }
 }

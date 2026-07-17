@@ -101,8 +101,15 @@ draw_from_config <- function(config_file, sample_sheet, matrix_dir,
     }
     plist <- removeSpace(plist)
     heights <- c(4, rep(1.7, length(plist) - 1))
-    pmix <- cowplot::plot_grid(plotlist = plist, ncol = 1, align = "v",
-                               rel_heights = heights)
+    # egg::ggarrange keeps panel widths aligned even for a coord_fixed (square)
+    # map; fall back to cowplot if egg is unavailable.
+    if (requireNamespace("egg", quietly = TRUE)) {
+      pmix <- cowplot::plot_grid(egg::ggarrange(plots = plist, ncol = 1,
+                                                heights = heights, draw = FALSE))
+    } else {
+      pmix <- cowplot::plot_grid(plotlist = plist, ncol = 1, align = "v",
+                                 rel_heights = heights)
+    }
     fout <- file.path(out_dir, paste0(out_name, ".png"))
     cowplot::save_plot(fout, pmix, base_width = base_width / 2.54,
                        base_height = base_height / 2.54, dpi = dpi)
