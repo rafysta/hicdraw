@@ -6,3 +6,4 @@
 ^README\.Rmd$
 ^\.git$
 ^\.gitignore$
+^\.claude$

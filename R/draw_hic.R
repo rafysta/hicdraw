@@ -71,7 +71,7 @@ drawHiC <- function(hic, dataName = "hic1", col = "red", ymax = NULL,
       ggplot2::coord_cartesian(xlim = c(pstart / unit, pend / unit),
                                ylim = c(pend / unit, pstart / unit))
     }
-    grob1 <- grid::grobTree(grid::textGrob("■", x = 0.06, y = 0.95, hjust = 1,
+    grob1 <- grid::grobTree(grid::textGrob("\u25A0", x = 0.06, y = 0.95, hjust = 1,
       vjust = 0.5, gp = grid::gpar(col = ifelse(col == "matlab", "red", col),
                                    fontsize = 18, fontface = "bold")))
     grob2 <- grid::grobTree(grid::textGrob(paste0(" ", round(Tv, 0)), x = 0.06,
@@ -121,7 +121,7 @@ drawHiC <- function(hic, dataName = "hic1", col = "red", ymax = NULL,
     start1 = x, end1 = x + rrn, start2 = y, end2 = y + rrn, score = counts))
   Tv <- as.numeric(stats::quantile(df$score, probs = zmax, na.rm = TRUE))
 
-  grob1 <- grid::grobTree(grid::textGrob("■", x = 0.06, y = 0.95,
+  grob1 <- grid::grobTree(grid::textGrob("\u25A0", x = 0.06, y = 0.95,
     hjust = 1, vjust = 0.5,
     gp = grid::gpar(col = ifelse(col == "matlab", "red", col),
                     fontsize = 18, fontface = "bold")))

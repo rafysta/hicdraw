@@ -11,13 +11,13 @@ Description: Tools for reading, slicing and plotting Hi-C contact maps together
     generate many figures in a single call.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
 Depends:
     R (>= 4.1)
 Imports:
     data.table,
+    grid,
+    tools,
     dplyr,
     tidyr,
     ggplot2,
@@ -40,3 +40,4 @@ Suggests:
 Config/testthat/edition: 3
 URL: https://github.com/rafysta/hicdraw
 BugReports: https://github.com/rafysta/hicdraw/issues
+Config/roxygen2/version: 8.0.0
